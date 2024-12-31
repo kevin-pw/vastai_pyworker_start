@@ -131,11 +131,6 @@ export REPORT_ADDR WORKER_PORT USE_SSL
 # from the run prior to reboot. past logs are saved in $MODEL_LOG.old for debugging only
 [ -e "$MODEL_LOG" ] && cat "$MODEL_LOG" >> "$MODEL_LOG.old" && : > "$MODEL_LOG"
 
-echo "Pulling ollama model"
-cd "$OLLAMA_DIR"
-./ollama pull llama3.2-vision:11b 2>&1 >> "$MODEL_LOG"
-echo "Pulling ollama model complete"
-
 echo "launching PyWorker server"
 cd "$SERVER_DIR"
 (python3 -m "workers.$BACKEND.server" |& tee -a "$PYWORKER_LOG") &
@@ -145,3 +140,8 @@ echo "Starting ollama server"
 cd "$OLLAMA_DIR"
 (./ollama serve 2>&1 >> "$MODEL_LOG") &
 echo "Ollama server started. Logs will appear in $MODEL_LOG"
+
+echo "Pulling ollama model"
+cd "$OLLAMA_DIR"
+./ollama pull llama3.2-vision:11b 2>&1 >> "$MODEL_LOG"
+echo "Pulling ollama model complete"
