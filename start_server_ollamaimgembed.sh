@@ -137,6 +137,10 @@ cd "$SERVER_DIR"
 (python3 -m "workers.$BACKEND.server" |& tee -a "$PYWORKER_LOG") &
 echo "launching PyWorker server done"
 
+# Deactivate the virtual environment
+deactivate
+echo "Virtual environment deactivated."
+
 echo "Starting ollama server"
 cd "$OLLAMA_DIR"
 (./ollama serve 2>&1 >> "$MODEL_LOG") &
