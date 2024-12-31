@@ -55,8 +55,8 @@ if [ ! -d "$ENV_PATH" ]
 then
     # Setup github deploy key from env to access private repo
     mkdir -p ~/.ssh
-    # Write the key to ~/.ssh/id_rsa
-    echo "$GIT_DEPLOY_KEY" > ~/.ssh/id_rsa
+    # Write the base64-encoded key to ~/.ssh/id_rsa
+    echo "$GIT_DEPLOY_KEY" | base64 -d > ~/.ssh/id_rsa
     chmod 600 ~/.ssh/id_rsa
 
     # Add github.com to known_hosts to avoid host-check prompts
