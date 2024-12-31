@@ -39,6 +39,7 @@ date
 
 echo_var BACKEND
 echo_var REPORT_ADDR
+echo_var SIGNING_KEY_ADDR
 echo_var WORKER_PORT
 echo_var WORKSPACE_DIR
 echo_var SERVER_DIR
@@ -49,8 +50,6 @@ echo_var MODEL_LOG
 echo_var OLLAMA_DIR
 
 env | grep _ >> /etc/environment;
-# Make environment variables accessible by any newly spanned shell scripts
-source /etc/environment
 
 # Setup the vastai pyworker repo on local and activate the environment
 if [ ! -d "$ENV_PATH" ]
@@ -127,7 +126,7 @@ curl --header 'Content-Type: application/octet-stream' \
     POST "https://console.vast.ai/api/v0/sign_cert/?instance_id=$CONTAINER_ID" > /etc/instance.crt;
 fi
 
-export REPORT_ADDR WORKER_PORT USE_SSL
+export REPORT_ADDR SIGNING_KEY_ADDR WORKER_PORT USE_SSL MODEL_LOG
 
 # if instance is rebooted, we want to clear out the log file so pyworker doesn't read lines
 # from the run prior to reboot. past logs are saved in $MODEL_LOG.old for debugging only
