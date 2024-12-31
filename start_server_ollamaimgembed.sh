@@ -51,6 +51,13 @@ echo_var OLLAMA_DIR
 
 env | grep _ >> /etc/environment;
 
+
+echo "Starting ollama server"
+# cd "$OLLAMA_DIR"
+(${OLLAMA_DIR}/ollama serve 2>&1 >> "$MODEL_LOG") &
+echo "Ollama server started. Logs will appear in $MODEL_LOG"
+
+
 # Setup the vastai pyworker repo on local and activate the environment
 if [ ! -d "$ENV_PATH" ]
 then
@@ -138,13 +145,13 @@ cd "$SERVER_DIR"
 echo "launching PyWorker server done"
 
 # Deactivate the virtual environment
-deactivate
-echo "Virtual environment deactivated."
+# deactivate
+# echo "Virtual environment deactivated."
 
-echo "Starting ollama server"
-cd "$OLLAMA_DIR"
-(./ollama serve 2>&1 >> "$MODEL_LOG") &
-echo "Ollama server started. Logs will appear in $MODEL_LOG"
+# echo "Starting ollama server"
+# cd "$OLLAMA_DIR"
+# (./ollama serve 2>&1 >> "$MODEL_LOG") &
+# echo "Ollama server started. Logs will appear in $MODEL_LOG"
 
 # Wait for the server to be ready
 echo "Waiting for the Ollama server to start..."
