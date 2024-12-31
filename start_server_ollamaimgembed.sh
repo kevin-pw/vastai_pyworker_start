@@ -32,9 +32,9 @@ BACKEND="ollamaimgembed"
 
 [ -z "$BACKEND" ] && echo "BACKEND must be set!" && exit 1
 [ -z "$MODEL_LOG" ] && echo "MODEL_LOG must be set!" && exit 1
-[ -z "$GIT_DEPLOY_KEY" ] && echo "GIT_DEPLOY_KEY must be set!" && exit 1
+[ -z "$GIT_DEPLOY_KEY" ] && echo "GIT_DEPLOY_KEY must be set so that we can download the vastai pyworker from our private repo!" && exit 1
 
-echo "start_server.sh"
+echo "start_server_ollamaimgembed.sh"
 date
 
 echo_var BACKEND
@@ -50,6 +50,7 @@ echo_var OLLAMA_DIR
 
 env | grep _ >> /etc/environment;
 
+# Setup the vastai pyworker repo on local and activate the environment
 if [ ! -d "$ENV_PATH" ]
 then
     # Setup github deploy key from env to access private repo
