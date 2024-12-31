@@ -57,6 +57,29 @@ echo "Starting ollama server"
 (${OLLAMA_DIR}/ollama serve 2>&1 >> "$MODEL_LOG") &
 echo "Ollama server started. Logs will appear in $MODEL_LOG"
 
+# Wait for the server to be ready
+echo "Waiting for the Ollama server to start..."
+MAX_RETRIES=30
+RETRY_INTERVAL=1
+SERVER_URL="http://127.0.0.1:11434"
+for ((i=1; i<=MAX_RETRIES; i++)); do
+    if curl -s "$SERVER_URL" >/dev/null 2>&1; then
+        echo "Ollama server is up!"
+        break
+    fi
+    if [ $i -eq $MAX_RETRIES ]; then
+        echo "ERROR: Ollama server failed to start after $((MAX_RETRIES * RETRY_INTERVAL)) seconds."
+        exit 1
+    fi
+    echo "Ollama server not yet responding after retry number: $i"
+    sleep $RETRY_INTERVAL
+done
+
+echo "Pulling ollama model"
+#cd "$OLLAMA_DIR"
+#./ollama pull llama3.2-vision:11b 2>&1 >> "$MODEL_LOG"
+(${OLLAMA_DIR}/ollama pull llama3.2-vision:11b 2>&1 >> "$MODEL_LOG") &
+echo "Pulling ollama model complete"
 
 # Setup the vastai pyworker repo on local and activate the environment
 if [ ! -d "$ENV_PATH" ]
@@ -153,25 +176,25 @@ echo "launching PyWorker server done"
 # (./ollama serve 2>&1 >> "$MODEL_LOG") &
 # echo "Ollama server started. Logs will appear in $MODEL_LOG"
 
-# Wait for the server to be ready
-echo "Waiting for the Ollama server to start..."
-MAX_RETRIES=30
-RETRY_INTERVAL=1
-SERVER_URL="http://127.0.0.1:11434"
-for ((i=1; i<=MAX_RETRIES; i++)); do
-    if curl -s "$SERVER_URL" >/dev/null 2>&1; then
-        echo "Ollama server is up!"
-        break
-    fi
-    if [ $i -eq $MAX_RETRIES ]; then
-        echo "ERROR: Ollama server failed to start after $((MAX_RETRIES * RETRY_INTERVAL)) seconds."
-        exit 1
-    fi
-    echo "Ollama server not yet responding after retry number: $i"
-    sleep $RETRY_INTERVAL
-done
+# # Wait for the server to be ready
+# echo "Waiting for the Ollama server to start..."
+# MAX_RETRIES=30
+# RETRY_INTERVAL=1
+# SERVER_URL="http://127.0.0.1:11434"
+# for ((i=1; i<=MAX_RETRIES; i++)); do
+#     if curl -s "$SERVER_URL" >/dev/null 2>&1; then
+#         echo "Ollama server is up!"
+#         break
+#     fi
+#     if [ $i -eq $MAX_RETRIES ]; then
+#         echo "ERROR: Ollama server failed to start after $((MAX_RETRIES * RETRY_INTERVAL)) seconds."
+#         exit 1
+#     fi
+#     echo "Ollama server not yet responding after retry number: $i"
+#     sleep $RETRY_INTERVAL
+# done
 
-echo "Pulling ollama model"
-cd "$OLLAMA_DIR"
-./ollama pull llama3.2-vision:11b 2>&1 >> "$MODEL_LOG"
-echo "Pulling ollama model complete"
+# echo "Pulling ollama model"
+# cd "$OLLAMA_DIR"
+# ./ollama pull llama3.2-vision:11b 2>&1 >> "$MODEL_LOG"
+# echo "Pulling ollama model complete"
