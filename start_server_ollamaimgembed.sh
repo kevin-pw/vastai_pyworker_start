@@ -68,6 +68,7 @@ then
     # install virtual environment
     apt install -y python3.10-venv
     echo "setting up venv"
+    echo "DEBUG: script has been updated successfully"
     git clone git@github.com:kevin-pw/vastai_pyworker.git "$SERVER_DIR" \
     || { 
         echo "ERROR: git clone failed! Check deploy key or repo URL." >&2
