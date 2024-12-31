@@ -5,7 +5,7 @@ set -e -o pipefail
 WORKSPACE_DIR="${WORKSPACE_DIR:-/workspace}"
 
 MODEL_LOG="$WORKSPACE_DIR/model.log"
-OLLAMA_DIR="/bin/ollama"
+OLLAMA_DIR="/bin"
 
 SERVER_DIR="$WORKSPACE_DIR/vast-pyworker"
 ENV_PATH="$WORKSPACE_DIR/worker-env"
