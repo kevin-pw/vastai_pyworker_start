@@ -49,6 +49,8 @@ echo_var MODEL_LOG
 echo_var OLLAMA_DIR
 
 env | grep _ >> /etc/environment;
+# Make environment variables accessible by any newly spanned shell scripts
+source /etc/environment
 
 # Setup the vastai pyworker repo on local and activate the environment
 if [ ! -d "$ENV_PATH" ]
