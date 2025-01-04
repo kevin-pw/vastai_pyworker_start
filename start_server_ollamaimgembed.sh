@@ -5,7 +5,10 @@ set -e -o pipefail
 WORKSPACE_DIR="${WORKSPACE_DIR:-/workspace}"
 
 MODEL_LOG="$WORKSPACE_DIR/model.log"
+
 OLLAMA_DIR="/bin"
+OLLAMA_DEFAULT_MODEL="${OLLAMA_DEFAULT_MODEL:-llama3.2-vision:11b}"
+OLLAMA_KEEP_ALIVE="${OLLAMA_KEEP_ALIVE:-3600}"
 
 SERVER_DIR="$WORKSPACE_DIR/vast-pyworker"
 ENV_PATH="$WORKSPACE_DIR/worker-env"
@@ -127,7 +130,7 @@ curl --header 'Content-Type: application/octet-stream' \
     POST "https://console.vast.ai/api/v0/sign_cert/?instance_id=$CONTAINER_ID" > /etc/instance.crt;
 fi
 
-export REPORT_ADDR SIGNING_KEY_ADDR WORKER_PORT USE_SSL MODEL_LOG
+export REPORT_ADDR SIGNING_KEY_ADDR WORKER_PORT USE_SSL MODEL_LOG OLLAMA_KEEP_ALIVE
 
 # if instance is rebooted, we want to clear out the log file so pyworker doesn't read lines
 # from the run prior to reboot. past logs are saved in $MODEL_LOG.old for debugging only
@@ -168,3 +171,7 @@ echo "Pulling ollama model"
 #(${OLLAMA_DIR}/ollama pull llama3.2-vision:11b 2>&1 >> "$MODEL_LOG") &
 (${OLLAMA_DIR}/ollama pull llama3.2-vision:11b |& tee -a "$MODEL_LOG") &
 echo "Pulling ollama model complete"
+
+echo "Loading default model $OLLAMA_DEFAULT_MODEL into GPU..."
+(${OLLAMA_DIR}/ollama run $OLLAMA_DEFAULT_MODEL "" |& tee -a "$MODEL_LOG") &
+echo "Default model loading complete"
