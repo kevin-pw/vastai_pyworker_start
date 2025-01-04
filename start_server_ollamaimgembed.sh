@@ -73,7 +73,6 @@ then
     # install virtual environment
     apt install -y python3.10-venv
     echo "setting up venv"
-    echo "DEBUG: script has been updated successfully"
     git clone git@github.com:kevin-pw/vastai_pyworker.git "$SERVER_DIR" \
     || { 
         echo "ERROR: git clone failed! Check deploy key or repo URL." >&2
@@ -165,12 +164,12 @@ for ((i=1; i<=MAX_RETRIES; i++)); do
     sleep $RETRY_INTERVAL
 done
 
-echo "Pulling ollama model"
+#echo "Pulling ollama model"
 #cd "$OLLAMA_DIR"
 #./ollama pull llama3.2-vision:11b 2>&1 >> "$MODEL_LOG"
 #(${OLLAMA_DIR}/ollama pull llama3.2-vision:11b 2>&1 >> "$MODEL_LOG") &
-(${OLLAMA_DIR}/ollama pull llama3.2-vision:11b |& tee -a "$MODEL_LOG") &
-echo "Pulling ollama model complete"
+#(${OLLAMA_DIR}/ollama pull llama3.2-vision:11b |& tee -a "$MODEL_LOG") &
+#echo "Pulling ollama model complete"
 
 echo "Loading default model $OLLAMA_DEFAULT_MODEL into GPU..."
 (${OLLAMA_DIR}/ollama run $OLLAMA_DEFAULT_MODEL "" |& tee -a "$MODEL_LOG") &
